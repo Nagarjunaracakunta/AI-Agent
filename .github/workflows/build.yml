@@ -43,7 +43,7 @@ jobs:
     name: Publish image and deploy to Hugging Face
     needs: build
     # Only deploy from these branches on pushes (never on pull requests)
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/simple-chatbot')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/chatbot-memory')
     runs-on: ubuntu-latest
     permissions:
       contents: read
