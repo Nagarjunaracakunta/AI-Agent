@@ -38,3 +38,59 @@ jobs:
           assert not at.exception, at.exception
           print("App loaded without errors")
           EOF
+
+  publish:
+    name: Publish image and deploy to Hugging Face
+    needs: build
+    # Only deploy from these branches on pushes (never on pull requests)
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/simple-chatbot')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      IMAGE: ghcr.io/nagarjunaracakunta/ai-agent
+      HF_SPACE: Nagarjuna2026/AI-Agent
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+
+      - name: Deploy to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git clone "https://Nagarjuna2026:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE}" space
+          cd space
+          printf 'FROM %s:%s\n' "$IMAGE" "$GITHUB_SHA" > Dockerfile
+          cat > README.md <<'README'
+          ---
+          title: AI Agent
+          emoji: 💬
+          colorFrom: blue
+          colorTo: indigo
+          sdk: docker
+          app_port: 7860
+          ---
+          README
+          git config user.email "ci@users.noreply.github.com"
+          git config user.name "github-actions"
+          git add -A
+          git commit -m "Deploy ${GITHUB_SHA}"
+          git push
