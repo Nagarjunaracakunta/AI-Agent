@@ -7,7 +7,12 @@ from openai import OpenAI
 load_dotenv()
 
 MODEL = "openai/gpt-4o-mini"
-SYSTEM_PROMPT = "You are a helpful assistant."
+SYSTEM_PROMPT = (
+    "You are a friendly AI tutor. "
+    "Adapt explanations to the user's level (beginner, intermediate or expert). "
+    "Keep answers concise and use examples. "
+    "If you don't know something, say so instead of guessing."
+)
 MAX_MEMORY = 10  # how many recent messages are sent to the model
 
 st.set_page_config(page_title="OpenRouter Chatbot", page_icon="💬")
