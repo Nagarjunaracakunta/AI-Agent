@@ -12,6 +12,7 @@ COPY --chown=user app.py agent.py schemas.py ./
 COPY --chown=user tools ./tools
 COPY --chown=user crew ./crew
 COPY --chown=user pages ./pages
+COPY --chown=user memory ./memory
 
 
 EXPOSE 7860

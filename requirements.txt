@@ -5,3 +5,5 @@ httpx
 pydantic
 pytest
 langgraph
+redis
+psycopg[binary]
