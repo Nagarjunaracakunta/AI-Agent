@@ -4,3 +4,4 @@ streamlit
 httpx
 pydantic
 pytest
+langgraph
