@@ -116,3 +116,13 @@ def test_decide_falls_back_to_add_on_bad_reply():
 def test_extract_facts_dedupes_and_caps():
     client = FakeClient(facts=["A", "a", " B ", "C", "D", "E", "F"])
     assert extract_facts(client, "m", "u", "a") == ["A", "B", "C", "D", "E"]
+
+
+def test_env_values_tolerate_pasted_quotes(monkeypatch):
+    from memory.config import _env
+    for raw in ("rediss://u:p@h:6379", "'rediss://u:p@h:6379'", '"rediss://u:p@h:6379"',
+                " rediss://u:p@h:6379' ", "rediss://u:p@h:6379'"):
+        monkeypatch.setenv("X_URL", raw)
+        assert _env("X_URL", "d") == "rediss://u:p@h:6379", raw
+    monkeypatch.setenv("X_URL", "  ")
+    assert _env("X_URL", "default") == "default"

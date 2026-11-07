@@ -5,8 +5,19 @@ from dotenv import load_dotenv
 # Load .env here so settings are right regardless of import order.
 load_dotenv()
 
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
-DATABASE_URL = os.getenv(
+
+
+def _env(name: str, default: str) -> str:
+    """Read a setting, tolerating whitespace and quotes pasted around the
+    value (a common slip when entering secrets in a web form)."""
+    value = (os.getenv(name) or "").strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+        value = value[1:-1].strip()
+    return value.strip("\"'").strip() or default
+
+
+REDIS_URL = _env("REDIS_URL", "redis://localhost:6379/0")
+DATABASE_URL = _env(
     "DATABASE_URL", "postgresql://assistant:assistant@localhost:5432/assistant"
 )
 

@@ -159,8 +159,9 @@ with st.sidebar:
     if memory is None:
         st.caption(
             f"Memory is offline ({memory_error}). Chat works, but nothing is "
-            "remembered across sessions. Start Redis and Postgres with "
-            "`docker compose up -d`."
+            "remembered across sessions. Locally, start Redis and Postgres with "
+            "`docker compose up -d`; on a Space, check the REDIS_URL and "
+            "DATABASE_URL secrets (no quotes around the values)."
         )
     else:
         try:
