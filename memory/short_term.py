@@ -1,6 +1,7 @@
 """Short-term memory: the chat turns of one session, kept in Redis."""
 import json
 
+import certifi
 import redis
 
 from .config import REDIS_URL, SHORT_TERM_MAX_TURNS, SHORT_TERM_TTL_SECONDS
@@ -9,8 +10,14 @@ from .config import REDIS_URL, SHORT_TERM_MAX_TURNS, SHORT_TERM_TTL_SECONDS
 class ShortTermMemory:
     def __init__(self, url: str = REDIS_URL, max_turns: int = SHORT_TERM_MAX_TURNS,
                  ttl_seconds: int = SHORT_TERM_TTL_SECONDS):
+        options = {}
+        if url.startswith("rediss://"):
+            # Hosted Redis (Upstash) uses TLS. Use certifi's CA bundle so this
+            # works even where Python has no system certificates (python.org
+            # builds on macOS).
+            options["ssl_ca_certs"] = certifi.where()
         self.r = redis.Redis.from_url(url, decode_responses=True, socket_timeout=3,
-                                      socket_connect_timeout=3)
+                                      socket_connect_timeout=3, **options)
         self.r.ping()  # fail fast if Redis is unreachable
         self.max_turns = max_turns
         self.ttl = ttl_seconds

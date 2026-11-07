@@ -7,3 +7,4 @@ pytest
 langgraph
 redis
 psycopg[binary]
+certifi
