@@ -25,25 +25,17 @@ jobs:
           pip install -r requirements.txt
 
       - name: Check syntax
-        run: python -m compileall app.py chat.py
+        run: python -m compileall app.py agent.py schemas.py tools
 
-      - name: Smoke test Streamlit app
-        env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-        run: |
-          python - <<'EOF'
-          from streamlit.testing.v1 import AppTest
+      - name: Run tests
+        run: python -m pytest -q
 
-          at = AppTest.from_file("app.py").run(timeout=30)
-          assert not at.exception, at.exception
-          print("App loaded without errors")
-          EOF
 
   publish:
     name: Publish image and deploy to Hugging Face
     needs: build
     # Only deploy from these branches on pushes (never on pull requests)
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/chatbot-memory')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/tool-call')
     runs-on: ubuntu-latest
     permissions:
       contents: read

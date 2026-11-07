@@ -8,8 +8,9 @@ WORKDIR /home/user/app
 
 COPY --chown=user requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+COPY --chown=user app.py agent.py schemas.py ./
+COPY --chown=user tools ./tools
 
-COPY --chown=user app.py .
 
 EXPOSE 7860
 CMD ["streamlit", "run", "app.py", "--server.port=7860", "--server.address=0.0.0.0"]
