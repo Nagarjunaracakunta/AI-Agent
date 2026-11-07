@@ -78,7 +78,7 @@ class LongTermMemory:
                 (fact, _vec(embedding), memory_id, user_id),
             )
 
-    def list(self, user_id: str) -> list[dict]:
+    def list_facts(self, user_id: str) -> list[dict]:
         with self._connect() as conn:
             return conn.execute(
                 "SELECT id, fact, updated_at FROM memories WHERE user_id = %s "

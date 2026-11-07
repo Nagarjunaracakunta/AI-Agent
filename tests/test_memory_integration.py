@@ -42,7 +42,7 @@ def test_pgvector_search_update_delete():
         assert long.search("someone-else", pad(fake_embedding("python")), 2, 0.0) == []
 
         long.update(uid, a, "User loves Rust", pad(fake_embedding("User loves Rust")))
-        assert "User loves Rust" in [r["fact"] for r in long.list(uid)]
+        assert "User loves Rust" in [r["fact"] for r in long.list_facts(uid)]
 
         long.save_summary(uid, "s1", "first")
         long.save_summary(uid, "s1", "second")  # upsert
@@ -50,4 +50,4 @@ def test_pgvector_search_update_delete():
         assert long.recent_summaries(uid, "s1", 5) == []
     finally:
         long.delete_all(uid)
-    assert long.list(uid) == []
+    assert long.list_facts(uid) == []

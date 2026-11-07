@@ -1,4 +1,6 @@
+import logging
 import os
+import re
 import uuid
 
 import streamlit as st
@@ -36,7 +38,10 @@ def get_memory(_client):
     try:
         return build_manager(_client), None
     except Exception as e:
-        return None, f"{type(e).__name__}"
+        logging.getLogger(__name__).exception("Memory backends unavailable")
+        # Show the reason, but never credentials from a connection string.
+        reason = re.sub(r"://[^@\s]*@", "://***@", str(e))[:120]
+        return None, f"{type(e).__name__}: {reason}"
 
 
 memory, memory_error = get_memory(client)

@@ -58,7 +58,7 @@ class FakeLong:
             if r["id"] == memory_id and r["user_id"] == user_id:
                 r["fact"], r["embedding"] = fact, embedding
 
-    def list(self, user_id):
+    def list_facts(self, user_id):
         return [{"id": r["id"], "fact": r["fact"]} for r in self.rows
                 if r["user_id"] == user_id]
 

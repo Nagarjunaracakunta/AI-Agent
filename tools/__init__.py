@@ -11,7 +11,7 @@ from .weather import get_weather
 TOOLS = {
     "get_weather": (
         WeatherArgs, get_weather,
-        "Get the current weather for a city. Use for any live weather question.",
+        "Get the current weather for a city or town. Use for any live weather question.",
     ),
     "convert_currency": (
         CurrencyArgs, convert_currency,

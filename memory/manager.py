@@ -100,7 +100,7 @@ class MemoryManager:
     # ---- privacy: view and delete ---------------------------------------
 
     def list_memories(self, user_id: str) -> list[dict]:
-        return self.long.list(user_id)
+        return self.long.list_facts(user_id)
 
     def forget(self, user_id: str, memory_id: int) -> None:
         self.long.delete(user_id, memory_id)
