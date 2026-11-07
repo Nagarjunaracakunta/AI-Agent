@@ -10,6 +10,8 @@ COPY --chown=user requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY --chown=user app.py agent.py schemas.py ./
 COPY --chown=user tools ./tools
+COPY --chown=user crew ./crew
+COPY --chown=user pages ./pages
 
 
 EXPOSE 7860

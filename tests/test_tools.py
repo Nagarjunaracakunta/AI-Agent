@@ -23,3 +23,10 @@ def test_missing_argument():
 def test_flights_mock_is_deterministic():
     args = json.dumps({"origin": "NYC", "destination": "LON", "date": "2026-12-01"})
     assert execute_tool("search_flights", args) == execute_tool("search_flights", args)
+
+
+def test_stub_search():
+    from tools.search import execute_search
+    result = execute_search("search_web", '{"query": "kubernetes"}')
+    assert len(result["results"]) == 3
+    assert "error" in execute_search("search_web", "{}")
