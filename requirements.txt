@@ -8,3 +8,5 @@ langgraph
 redis
 psycopg[binary]
 certifi
+pypdf
+tiktoken

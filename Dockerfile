@@ -13,6 +13,7 @@ COPY --chown=user tools ./tools
 COPY --chown=user crew ./crew
 COPY --chown=user pages ./pages
 COPY --chown=user memory ./memory
+COPY --chown=user rag ./rag
 
 
 EXPOSE 7860
